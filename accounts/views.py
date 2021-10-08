@@ -1,18 +1,22 @@
-from django.shortcuts import render
-from django.contrib.auth.models import User
-
 # Create your views here.
+from django.shortcuts import  render, redirect
+from .forms import NewUserForm
+from django.contrib.auth import login
+from django.contrib import messages
+
+app_name= 'accounts'
+
 def sign_up(request):
-    if request.method == 'POST':
-        if request.POST['password1'] == request.POST['password2']:
-            user = User.objects.create_user(
-                                            username=request.POST['username'],
-                                            password=request.POST['password1'],
-                                            email=request.POST['email'],)
-            auth.login(request, user)
-            return redirect('/')
-        return render(request, 'accounts/sign_up.html')
-    return render(request, 'accounts/sign_up.html')
+	if request.method == "POST":
+		form = NewUserForm(request.POST)
+		if form.is_valid():
+			user = form.save()
+			login(request, user)
+			messages.success(request, "Registration successful." )
+			return redirect("catalog:index")
+		messages.error(request, "Unsuccessful registration. Invalid information.")
+	form = NewUserForm()
+	return render (request=request, template_name="accounts/sign_up.html", context={"register_form":form})
 
 def login():
     return render(request, 'accounts/login.html')

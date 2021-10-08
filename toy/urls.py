@@ -22,5 +22,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', catalog.views.index, name='index'),
     path('catalog/', include('catalog.urls')),
-    path('accounts/', include('accounts.urls')),
+    path(r'^accounts/', include('accounts.urls')),
 ]
