@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bootstrap4',
     'crispy_forms',
+    'sass_processor',
     'catalog',
     'accounts',
 ]
@@ -130,3 +131,9 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+SASS_PROCESSOR_ENABLED = True
+SASS_ROOT = os.path.join(BASE_DIR, 'static')
+SASS_OUTPUT_STYLE = 'compact'
+SASS_PROCESSOR_ROOT = os.path.join(BASE_DIR, 'static')
+SASS_PRECISION = 8

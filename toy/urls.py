@@ -21,6 +21,6 @@ import accounts.views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', catalog.views.index, name='index'),
-    path('catalog/', include('catalog.urls')),
+    path(r'^catalog/', include('catalog.urls')),
     path(r'^accounts/', include('accounts.urls')),
 ]

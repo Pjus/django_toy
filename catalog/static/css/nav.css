@@ -19,7 +19,6 @@ overflow:visible;
 
 .main-menu {
 background:#212121;
-border-right:1px solid #e5e5e5;
 position:absolute;
 top:0;
 bottom:0;
@@ -49,7 +48,7 @@ position:relative;
 display:table;
 border-collapse:collapse;
 border-spacing:0;
-color:#999;
+color:rgb(255, 255, 255);
  font-family: arial;
 font-size: 14px;
 text-decoration:none;
@@ -89,8 +88,6 @@ width:190px;
   left:0;
   bottom:5%;
 }
-
-  
 
 .no-touch .scrollable.hover {
 overflow-y:hidden;

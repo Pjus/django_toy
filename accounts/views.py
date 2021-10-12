@@ -3,6 +3,8 @@ from django.shortcuts import  render, redirect
 from .forms import NewUserForm
 from django.contrib.auth import login
 from django.contrib import messages
+from django.contrib.auth.models import User
+from django.contrib import auth
 
 app_name= 'accounts'
 
@@ -13,13 +15,19 @@ def sign_up(request):
 			user = form.save()
 			login(request, user)
 			messages.success(request, "Registration successful." )
-			return redirect("catalog:index")
+			return redirect("index")
 		messages.error(request, "Unsuccessful registration. Invalid information.")
 	form = NewUserForm()
-	return render (request=request, template_name="accounts/sign_up.html", context={"register_form":form})
+	return render(request, "accounts/sign_up.html", context={"register_form":form})
 
-def login():
-    return render(request, 'accounts/login.html')
+def login_try(request):
+	status = "logout"
+	if request.user.is_authenticated:
+		status = "login"
+	return render(request, 'accounts/login.html', {'status':status})
 
-def logout():
-    return render(request, 'accounts/logout.html')
+def logout(request):
+    if request.method == 'POST':
+        auth.logout(request)
+        redirect('home')
+    return render(request,'login.html')
