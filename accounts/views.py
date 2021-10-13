@@ -1,14 +1,17 @@
 # Create your views here.
 import re
 from django.shortcuts import  render, redirect
-from .forms import NewUserForm
+from .forms import NewUserForm, RecoveryIdForm
 from django.contrib.auth import login, authenticate
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib import auth
 from django.contrib.auth.forms import AuthenticationForm 
 from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import View
+from django.utils.decorators import method_decorator
 
+from .decorator import *
 
 app_name= 'accounts'
 
@@ -51,3 +54,14 @@ def login_try(request):
 def logout(request):
 	auth.logout(request)
 	return redirect('index')	
+
+
+@method_decorator(logout_message_required, name='dispatch')
+class RecoveryIdView(View):
+    template_name = 'users/recovery_id.html'
+    form = RecoveryIdForm
+
+    def get(self, request):
+        if request.method=='GET':
+            form = self.recovery_id(None)
+        return render(request, self.template_name, { 'form':form, })
