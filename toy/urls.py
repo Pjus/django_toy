@@ -23,4 +23,6 @@ urlpatterns = [
     path('', catalog.views.index, name='index'),
     path(r'^catalog/', include('catalog.urls')),
     path(r'^accounts/', include('accounts.urls')),
+    path(r'^chart/', include('chart.urls')),
+
 ]

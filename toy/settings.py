@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'sass_processor',
     'catalog',
     'accounts',
+    'chart',
 ]
 
 MIDDLEWARE = [
