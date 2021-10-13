@@ -7,11 +7,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web:300">
     <link rel="stylesheet" href="{% static 'css/nav.css' %}">
     <link rel="stylesheet" href="{% sass_src 'css/search.scss' %}">
-
 
 </head>
 <body>
@@ -95,6 +95,18 @@
             </li>
         </ul>
 
+        {% if logged == True%}
+        <ul class="login">
+            <li>
+               <a href="{% url 'logout' %}">
+                     <i class="fa fa-power-off fa-2x"></i>
+                    <span class="nav-text">
+                        Logout
+                    </span>
+                </a>
+            </li>  
+        </ul>
+        {% else %}
         <ul class="signup">
             <li>
                <a href="{% url 'signup' %}">
@@ -108,7 +120,7 @@
 
         <ul class="login">
             <li>
-               <a href="{% url 'index' %}">
+               <a href="{% url 'login' %}">
                      <i class="fa fa-power-off fa-2x"></i>
                     <span class="nav-text">
                         Login
@@ -116,15 +128,20 @@
                 </a>
             </li>  
         </ul>
+        {% endif %}
     </nav>
     <main id="container">
-        <div class="search">
-            <form action="{% url 'search' %}">
-                <label for="search">Search for stuff</label>
-                <input id="search" type="search" placeholder="Search ticker..." name="ticker" autofocus required />
-                <button type="submit">Go</button>    
-            </form>
-        </div>
+        {% if sign == True%}
+        {% else %}
+            <div class="search">
+                <form action="{% url 'search' %}">
+                    <label for="search">Search for stuff</label>
+                    <input id="search" type="search" placeholder="Search ticker..." name="ticker" autofocus required />
+                    <button type="submit">Go</button>    
+                </form>
+            </div>
+        {% endif %}
+
         <div class="area">
             {% block content %}
             {% endblock %}

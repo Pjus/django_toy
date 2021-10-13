@@ -1,0 +1,120 @@
+/**
+ * 01/28/2016
+ * This pen is years old, and watching at the code after all
+ * those years made me fall from my chair, so I:
+ * - changed all IDs to classes
+ * - converted all units to pixels and em units
+ * - changed all global elements to classes or children of
+ *   .login
+ * - cleaned the syntax to be more consistent
+ * - added a lot of spaces that I so hard tried to avoid
+ *   a few years ago
+ *   (because it's cool to not use them)
+ * - and probably something else that I can't remember anymore
+ *
+ * I sticked to the same philosophy, meaning:
+ * - the design is almost the same
+ * - only pure HTML and CSS
+ * - no frameworks, preprocessors or resets
+ */
+
+/* 'Open Sans' font from Google Fonts */
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700);
+
+body {
+  font-family: 'Open Sans', sans-serif;
+}
+
+.login {
+  width: 400px;
+  margin: 16px auto;
+  font-size: 16px;
+  margin-top: 100px;
+  
+}
+
+/* Reset top and bottom margins from certain elements */
+.login-header,
+.login p {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.login-header {
+  background: rgba(166, 159, 224, 0.753);
+  padding: 20px;
+  font-size: 1.4em;
+  font-weight: normal;
+  text-align: center;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.login-container {
+  background: #ebebeb;
+  padding: 12px;
+  
+}
+
+/* Every row inside .login-container is defined with p tags */
+.login p {
+  padding: 12px;
+}
+
+.login input {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  border-width: 1px;
+  border-style: solid;
+  padding: 16px;
+  outline: 0;
+  font-family: inherit;
+  font-size: 0.95em;
+}
+
+.login input[type="text"],
+.login input[type="password"] {
+  background: #fff;
+  border-color: #bbb;
+  color: #555;
+}
+
+/* Text fields' focus effect */
+.login input[type="email"]:focus,
+.login input[type="password"]:focus {
+  border-color: #888;
+}
+
+.login input[type="submit"] {
+  background: rgba(148, 139, 224, 0.753);
+  border-color: transparent;
+  color: #fff;
+  cursor: pointer;
+  padding: 16px;
+
+}
+
+.login input[type="submit"]:hover {
+  background:  rgba(105, 93, 219, 0.753);
+}
+
+/* Buttons' focus effect */
+.login input[type="submit"]:focus {
+  border-color: rgba(110, 97, 231, 0.753);
+}
+
+label{  
+    color: white;
+}
+
+.text-center {
+    color: white;
+    font-size: 1.5rem;
+}
+
+.messages {
+    color:rgb(255, 38, 0);
+    font-size: 2.5rem;
+
+}

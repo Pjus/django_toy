@@ -1,0 +1,31 @@
+{% extends "catalog/index.html" %}
+{% load bootstrap4 %}
+{% load static %}
+{% block content %}      
+
+{% load crispy_forms_tags %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+
+
+<!--Login--> 
+<div class="login">
+  <h1 class="login-header">Login</h1>
+  <form method="POST">
+    {% csrf_token %}
+    {{ login_form|crispy }}
+    <p><input type="submit" value="Log in"></p>
+  </form>
+  <p class="text-center">Don't have an account? <a href="{% url 'signup' %}">Create an account</a>.</p>
+</div>
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<script src="{% static 'login.js' %}"></script>
+
+{% endblock %}

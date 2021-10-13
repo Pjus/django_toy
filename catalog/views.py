@@ -16,24 +16,24 @@ import os
 import time
 import sqlite3
 
+from .utils import get_data_from_yahoo
 
 def index(request):
-    return render(request, 'catalog/index.html')
+    if request.user.is_authenticated:
+        print("User is logged in :)")
+        print(f"Username --> {request.user.username}")
+    else:
+        print("User is not logged in :(")
+    return render(request, 'catalog/index.html', {"logged":request.user.is_authenticated})
 
-
-def get_data_from_yahoo(ticker):
-    start = dt.datetime(2000,1,1)
-    df = web.DataReader(ticker, 'yahoo', start)
-    return df
 
 #We use get_data method from utils
 def get_stock(request):
     if request.method == "GET":
         ticker = request.GET['ticker']
         print(ticker)
-        return render(request, 'catalog/index.html', {'ticker':ticker})
 
-        # df = get_data_from_yahoo()
+        # df = get_data_from_yahoo(ticker)
         # # print(source)
         # df.columns = [i.lower() for i in df.columns]
         # source = ColumnDataSource(data=df)
@@ -67,3 +67,5 @@ def get_stock(request):
         # p.add_tools(hover)
 
         # show(p)
+
+        return render(request, 'catalog/graph.html', {'ticker':ticker})
