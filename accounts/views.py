@@ -40,8 +40,6 @@ def login_try(request):
 			else:
 				messages.error(request,"Invalid username or password.")
 				print("Use None")
-
-
 		else:
 			messages.error(request,"Invalid username or password.")
 			print("Not vaild")

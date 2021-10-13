@@ -1,22 +1,25 @@
 import re
+import numpy as np
+
 from django.shortcuts import render
+from .utils import get_data_from_yahoo
+
+from bokeh.layouts import gridplot, column
 from bokeh.plotting import figure, show
 from bokeh.embed import components
-from bokeh.resources import CDN
-from bokeh.models import WheelZoomTool, RangeTool, ColumnDataSource, Range1d, HoverTool, CDSView, BooleanFilter
-from bokeh.layouts import column
 
-import requests
-from math import pi
 
-import pandas as pd
-import datetime as dt
-import pandas_datareader.data as web
-import os
-import time
-import sqlite3
+p1 = figure(x_axis_type="datetime", title="Stock Closing Prices")
+p1.grid.grid_line_alpha=0.3
+p1.xaxis.axis_label = 'Date'
+p1.yaxis.axis_label = 'Price'
+
 
 from .utils import get_data_from_yahoo
+
+def datetime(x):
+    return np.array(x, dtype=np.datetime64)
+
 
 def index(request):
     if request.user.is_authenticated:
@@ -31,41 +34,41 @@ def index(request):
 def get_stock(request):
     if request.method == "GET":
         ticker = request.GET['ticker']
-        print(ticker)
 
-        # df = get_data_from_yahoo(ticker)
-        # # print(source)
-        # df.columns = [i.lower() for i in df.columns]
-        # source = ColumnDataSource(data=df)
-        # hover = HoverTool(
-        #     tooltips=[
-        #         ('d', '@datetime{%H:%M}'),
-        #         ('o', '@open{0}'),
-        #         ('h', '@high{0}'),
-        #         ('l', '@low{0}'),
-        #         ('c', '@close{0}'),
-        #         ('v', '@volume{0}'),
-        #     ],
-        #     formatters={
-        #         '@datetime': 'datetime'
-        #     },
-        #     mode='mouse'
-        # )
-        # inc_b = source.data['close'] > source.data['open']
-        # inc = CDSView(source=source, filters=[BooleanFilter(inc_b)])
-        # dec_b = source.data['open'] > source.data['close']
-        # dec = CDSView(source=source, filters=[BooleanFilter(dec_b)])
-        # w = 60000
+        df = get_data_from_yahoo(ticker)
+        df.columns = [i.lower() for i in df.columns]
+        df['date'] = df.index
 
-        # p = figure(x_axis_type="datetime", sizing_mode="stretch_width", height=400)
-        # p.segment(source=source, x0='datetime', x1='datetime', y0='high', y1='low', color="black")
-        # p.vbar(source=source, view=inc, x='datetime', width=w, top='open', bottom='close', fill_color="green", line_color="green")
-        # p.vbar(source=source, view=dec, x='datetime', width=w, top='open', bottom='close', fill_color="red", line_color="red")
-        # p.line(source=source, x='datetime', y='bband_up', line_width=1, alpha=0.8, legend_label='bband_up', color='green')
-        # p.line(source=source, x='datetime', y='bband_mid', line_width=1, alpha=0.8, legend_label='bband_mid', color='blue')
-        # p.line(source=source, x='datetime', y='bband_low', line_width=1, alpha=0.8, legend_label='bband_low', color='red')
-        # p.add_tools(hover)
+        print(df.head())
 
-        # show(p)
+        p1 = figure(x_axis_type="datetime", title="Stock Closing Prices")
+        p1.grid.grid_line_alpha=0.3
+        p1.xaxis.axis_label = 'Date'
+        p1.yaxis.axis_label = 'Price'
 
-        return render(request, 'catalog/graph.html', {'ticker':ticker})
+        p1.line(datetime(df['date']), df['adj close'], color='#A6CEE3', legend_label=ticker)
+        p1.legend.location = "top_left"
+
+        aapl = np.array(df['adj close'])
+        aapl_dates = np.array(df['date'], dtype=np.datetime64)
+
+        window_size = 30
+        window = np.ones(window_size)/float(window_size)
+        aapl_avg = np.convolve(aapl, window, 'same')
+
+        p2 = figure(x_axis_type="datetime", title="AAPL One-Month Average")
+        p2.grid.grid_line_alpha = 0
+        p2.xaxis.axis_label = 'Date'
+        p2.yaxis.axis_label = 'Price'
+        p2.ygrid.band_fill_color = "olive"
+        p2.ygrid.band_fill_alpha = 0.1
+
+        p2.scatter(aapl_dates, aapl, size=4, legend_label='close',
+                color='darkgrey', alpha=0.2)
+
+        p2.line(aapl_dates, aapl_avg, legend_label='avg', color='navy')
+        p2.legend.location = "top_left"
+
+        script, div = components(column(p1, p2))
+
+        return render(request, 'chart/graph.html', {'ticker':ticker, 'script':script, 'div':div})
